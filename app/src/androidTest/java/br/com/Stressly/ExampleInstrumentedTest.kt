@@ -1,4 +1,4 @@
-package br.com.navegandoentretelas
+package br.com.Stressly
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

@@ -1,4 +1,4 @@
-package br.com.navegandoentretelas.ui.theme
+package br.com.Stressly.ui.theme
 
 import android.app.Activity
 import android.os.Build

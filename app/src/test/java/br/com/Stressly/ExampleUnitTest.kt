@@ -1,4 +1,4 @@
-package br.com.navegandoentretelas
+package br.com.Stressly
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package br.com.navegandoentretelas.screens
+package br.com.Stressly.presentation.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,14 +17,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
-fun PedidosScreen(navController: NavController, numero: String) {
+fun LoginScreen(navController: NavController) {
     Box(modifier = Modifier
         .fillMaxSize()
-        .background(Color(0xFFAFA9A9))
+        .background(Color(0xFFED145B))
         .padding(32.dp)
     ){
         Text(
-            text = "PEDIDOS - $numero",
+            text = "LOGIN",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White
@@ -34,7 +34,7 @@ fun PedidosScreen(navController: NavController, numero: String) {
             colors = ButtonDefaults.buttonColors(Color.White),
             modifier = Modifier.align(Alignment.Center)
         ) {
-            Text(text = "Voltar", fontSize = 20.sp, color = Color.Blue)
+            Text(text = "ENTRAR", fontSize = 20.sp, color = Color.Blue)
         }
     }
 }

@@ -1,4 +1,4 @@
-package br.com.navegandoentretelas.ui.theme
+package br.com.Stressly.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package br.com.navegandoentretelas.screens
+package br.com.Stressly.presentation.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,14 +17,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
-fun PerfilScreen(navController: NavController, nome: String, idade: Int) {
+fun PedidosScreen(navController: NavController, numero: String) {
     Box(modifier = Modifier
         .fillMaxSize()
-        .background(Color(0xFF329F6B))
+        .background(Color(0xFFAFA9A9))
         .padding(32.dp)
     ){
         Text(
-            text = "PERFIL - $nome - $idade",
+            text = "PEDIDOS - $numero",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White

@@ -1,4 +1,4 @@
-package br.com.navegandoentretelas.screens
+package br.com.Stressly.presentation.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
