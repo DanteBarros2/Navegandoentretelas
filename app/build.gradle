@@ -1,9 +1,11 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id("io.realm.kotlin") version "1.11.0" // ou mais recente
 }
 
-android {
+
+    android {
     namespace 'br.com.navegandoentretelas'
     compileSdk 33
 
@@ -65,5 +67,7 @@ dependencies {
     // Dependência do Navigation
     implementation 'androidx.navigation:navigation-compose:2.6.0'
     implementation "com.google.accompanist:accompanist-navigation-animation:0.30.1"
+    // Realm
+    implementation("io.realm.kotlin:library-base:1.11.0")
 
 }

@@ -1,54 +1,67 @@
 package br.com.Stressly
 
+import android.annotation.SuppressLint
+import android.util.Log
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavType
-//import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import br.com.Stressly.data.datasource.RegistroDiarioRealm
 import br.com.Stressly.data.repository.RegistroDiarioRepositoryImpl
+import br.com.Stressly.domain.model.CargaTrabalho
+import br.com.Stressly.domain.model.Emoji
+import br.com.Stressly.domain.model.EstadoEmocional
+import br.com.Stressly.domain.model.RegistroDiario
+import br.com.Stressly.domain.usecase.BuscarTodosRegistrosUseCase
 import br.com.Stressly.domain.usecase.SalvarRegistroDiarioUseCase
 import br.com.Stressly.presentation.registrodiario.RegistroDiarioViewModel
-import br.com.Stressly.presentation.screens.LoginScreen
-import br.com.Stressly.presentation.screens.MenuScreen
-import br.com.Stressly.presentation.screens.PedidosScreen
-import br.com.Stressly.presentation.screens.PerfilScreen
 import br.com.Stressly.presentation.screens.RegistroDiarioScreen
 import br.com.Stressly.ui.theme.NavegandoEntreTelasTheme
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.google.accompanist.navigation.animation.composable
+import io.realm.kotlin.Realm
+import io.realm.kotlin.RealmConfiguration
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("CoroutineCreationDuringComposition")
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             NavegandoEntreTelasTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    val viewModel = RegistroDiarioViewModel(
-                        SalvarRegistroDiarioUseCase(
-                            RegistroDiarioRepositoryImpl()
+                Surface(modifier = Modifier.fillMaxSize()) {
+
+                    val realm =
+                        Realm.open(RealmConfiguration.create(schema = setOf(RegistroDiarioRealm::class)))
+                    val repository = RegistroDiarioRepositoryImpl(realm)
+
+                    val salvar = SalvarRegistroDiarioUseCase(repository)
+                    val buscarTodos = BuscarTodosRegistrosUseCase(repository)
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val registro = RegistroDiario(
+                            data = LocalDate.now(),
+                            emoji = Emoji.FELIZ,
+                            estadoEmocional = EstadoEmocional.ANIMADO,
+                            cargaTrabalho = CargaTrabalho.MEDIA
                         )
-                    )
-                    RegistroDiarioScreen(viewModel)
+                        salvar(registro)
 
+                        val todos = buscarTodos()
+                        Log.d("Stressly", "Todos os registros: $todos")
+                    }
 
+                    RegistroDiarioScreen(RegistroDiarioViewModel(salvarRegistroDiarioUseCase = salvar))
                 }
             }
         }
     }
 }
+
 
