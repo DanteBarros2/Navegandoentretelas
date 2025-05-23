@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,10 +17,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.Stressly.domain.model.ChatMessage
+import com.google.rpc.Help
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatBotScreen(viewModel: ChatBotViewModel, onVoltarClick: () -> Unit) {
+fun ChatBotScreen(
+    viewModel: ChatBotViewModel,
+    onVoltarClick: () -> Unit,
+    onChatBotClick: () -> Unit
+) {
     val messages by viewModel.messages.collectAsState()
 
     var input by remember { mutableStateOf("") }
@@ -35,7 +41,16 @@ fun ChatBotScreen(viewModel: ChatBotViewModel, onVoltarClick: () -> Unit) {
                             contentDescription = "Voltar"
                         )
                     }
+                },
+                actions = {
+                    IconButton(onClick = onChatBotClick) {
+                        Icon(
+                            imageVector = Icons.Default.HelpOutline,
+                            contentDescription = "Ajuda"
+                        )
+                    }
                 }
+
             )
         }
     ) { padding ->
@@ -86,7 +101,6 @@ fun ChatBotScreen(viewModel: ChatBotViewModel, onVoltarClick: () -> Unit) {
 @Composable
 fun ChatMessageItem(message: ChatMessage) {
     val backgroundColor = if (message.isUser) Color(0xFF4D9DA5) else Color(0xFFE0E0E0)
-    val alignment = if (message.isUser) Alignment.End else Alignment.Start
     val textColor = if (message.isUser) Color.White else Color.Black
 
     Row(

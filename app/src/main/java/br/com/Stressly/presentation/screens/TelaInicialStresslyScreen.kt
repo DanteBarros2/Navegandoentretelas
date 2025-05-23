@@ -14,12 +14,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.navegandoentretelas.R
-
-
 @Composable
 fun TelaInicialStresslyScreen(
     onEntrarClick: () -> Unit,
-    onInformacoesClick: () -> Unit
+    onInformacoesClick: () -> Unit,
+    onChatBotClick: () -> Unit // <- Adicionando callback para o ChatBot
 ) {
     Column(
         modifier = Modifier
@@ -33,17 +32,9 @@ fun TelaInicialStresslyScreen(
             painter = painterResource(id = R.drawable.logo_stressly),
             contentDescription = "Logo do Stressly",
             modifier = Modifier
-                .height(200.dp)
-                .padding(bottom = 16.dp),
+                .height(400.dp)
+                .padding(bottom = 8.dp),
             contentScale = ContentScale.Fit
-        )
-
-        // Nome do app
-        Text(
-            text = "Stressly",
-            fontSize = 36.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF0D253C)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -108,6 +99,23 @@ fun TelaInicialStresslyScreen(
         ) {
             Text(
                 text = "Informações",
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // ✅ Botão ChatBot
+        OutlinedButton(
+            onClick = onChatBotClick,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth(0.6f)
+                .height(48.dp)
+        ) {
+            Text(
+                text = "Falar com o ChatBot",
                 color = Color.Black,
                 fontWeight = FontWeight.Bold
             )

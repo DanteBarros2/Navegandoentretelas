@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,10 +20,11 @@ import br.com.Stressly.domain.model.EstadoEmocional
 import br.com.Stressly.domain.model.RegistroDiario
 import br.com.Stressly.domain.usecase.BuscarTodosRegistrosUseCase
 import br.com.Stressly.domain.usecase.SalvarRegistroDiarioUseCase
+import br.com.Stressly.presentation.chatbot.ChatBotScreen
+import br.com.Stressly.presentation.informacoes.InformacoesViewModel
 import br.com.Stressly.presentation.registrodiario.RegistroDiarioViewModel
-import br.com.Stressly.presentation.screens.InformacoesScreen
-import br.com.Stressly.presentation.screens.RegistroDiarioScreen
-import br.com.Stressly.presentation.screens.TelaInicialStresslyScreen
+import br.com.Stressly.presentation.screens.*
+import br.com.Stressly.presentation.chatbot.ChatBotViewModel
 import br.com.Stressly.ui.theme.NavegandoEntreTelasTheme
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
@@ -30,6 +32,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("CoroutineCreationDuringComposition")
@@ -40,7 +43,7 @@ class MainActivity : ComponentActivity() {
             NavegandoEntreTelasTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
 
-                    // Banco Realm
+                    // ✅ Banco Realm
                     val realm = Realm.open(
                         RealmConfiguration.create(
                             schema = setOf(RegistroDiarioRealm::class)
@@ -51,7 +54,7 @@ class MainActivity : ComponentActivity() {
                     val salvar = SalvarRegistroDiarioUseCase(repository)
                     val buscarTodos = BuscarTodosRegistrosUseCase(repository)
 
-                    // Teste opcional no banco
+                    // ✅ Teste opcional no banco
                     CoroutineScope(Dispatchers.IO).launch {
                         val registro = RegistroDiario(
                             data = LocalDate.now(),
@@ -65,27 +68,22 @@ class MainActivity : ComponentActivity() {
                         Log.d("Stressly", "Todos os registros: $todos")
                     }
 
-                    // Navegação
+                    // ✅ Navegação
                     val navController = rememberNavController()
 
                     NavHost(
                         navController = navController,
                         startDestination = "tela_inicial"
                     ) {
-
-                        // Tela inicial
                         composable("tela_inicial") {
                             TelaInicialStresslyScreen(
-                                onEntrarClick = {
-                                    navController.navigate("registro_diario")
-                                },
-                                onInformacoesClick = {
-                                    navController.navigate("informacoes")
-                                }
+                                onEntrarClick = { navController.navigate("registro_diario") },
+                                onInformacoesClick = { navController.navigate("informacoes") },
+                                onChatBotClick = { navController.navigate("chatbot") }
                             )
                         }
 
-                        // Tela de registro diário
+                        // ✅ Tela de registro diário
                         composable("registro_diario") {
                             RegistroDiarioScreen(
                                 viewModel = RegistroDiarioViewModel(
@@ -94,14 +92,31 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        // Tela de informações
+                        // ✅ Tela de informações
                         composable("informacoes") {
                             InformacoesScreen(
+                                viewModel = InformacoesViewModel(),
                                 onVoltarClick = {
                                     navController.popBackStack()
                                 }
                             )
                         }
+
+                        composable("chatbot") {
+                            val chatBotViewModel: ChatBotViewModel = viewModel()
+
+                            ChatBotScreen(
+                                viewModel = chatBotViewModel,
+                                onVoltarClick = {
+                                    navController.popBackStack()
+                                },
+                                onChatBotClick = {
+                                    // 🔥 Ação ao clicar no botão de ajuda
+                                    println("Botão de ajuda clicado!")
+                                }
+                            )
+                        }
+
                     }
                 }
             }
